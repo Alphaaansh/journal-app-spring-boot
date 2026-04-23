@@ -27,8 +27,10 @@ public class User {
     @NotNull
     private String password;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private List<JournalEntry> journalEntries=new ArrayList<>();
 
+    @ElementCollection
     private List<String>roles;
 }

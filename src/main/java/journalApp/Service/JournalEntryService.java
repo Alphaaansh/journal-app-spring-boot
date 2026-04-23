@@ -5,7 +5,6 @@ import journalApp.Repository.JournalEntryRepository;
 import journalApp.Entity.JournalEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,10 +60,9 @@ public class JournalEntryService {
         boolean removed=user.getJournalEntries().removeIf(x ->x.getId().equals(id));
 
         if (removed){
-            userService.saveNewUser(user);
+            userService.saveUser(user);
             journalEntryRepository.deleteById(id);
         }
-
         return removed;
     }
 
@@ -80,5 +78,16 @@ public class JournalEntryService {
         User user=userService.findByName(name);
 
         return user.getJournalEntries();
+    }
+
+    public Optional<JournalEntry>findByIdAndUser(Long myId,String name){
+        User user=userService.findByName(name);
+
+        boolean ownEntry=user.getJournalEntries().stream().anyMatch(x->x.getId().equals(myId));
+
+        if (ownEntry){
+            return journalEntryRepository.findById(myId);
+        }
+        return Optional.empty();
     }
 }

@@ -29,7 +29,7 @@ public class JournalEntryController {
     @Autowired
     private UserService userService;
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<?> getAllJournalEntriesOfUser(){
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         String name=authentication.getName();
@@ -41,12 +41,12 @@ public class JournalEntryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<?> createEntry(@RequestBody JournalEntry myEntry){
         try {
             Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
             String name=authentication.getName();
-            myEntry.setDate(LocalDateTime.now());
+
             journalEntryService.saveEntry(myEntry,name);
             return new ResponseEntity<>(myEntry,HttpStatus.CREATED);
         } catch (Exception e) {
@@ -59,14 +59,10 @@ public class JournalEntryController {
     {
         Authentication authentication=SecurityContextHolder.createEmptyContext().getAuthentication();
         String name=authentication.getName();
-        User user=userService.findByName(name);
-        List<JournalEntry> collect=user.getJournalEntries().stream().filter(x ->x.getId().equals(myId)).collect(Collectors.toList());
 
-        if (collect!= null){
-            Optional<JournalEntry>journalEntry=journalEntryService.findById(myId);
-            if (journalEntry.isPresent()){
-                return new ResponseEntity<>(journalEntry.get(),HttpStatus.OK);
-            }
+        Optional<JournalEntry>journalEntry=journalEntryService.findByIdAndUser(myId, name);
+        if (journalEntry.isPresent()){
+            return new ResponseEntity<>(journalEntry.get(),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

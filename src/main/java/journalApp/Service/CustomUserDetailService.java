@@ -23,7 +23,6 @@ public class CustomUserDetailService implements UserDetailsService {
                     .password(user.getPassword())
                     .roles(user.getRoles().toArray(new String[0]))
                     .build();
-
             return userDetails;
         }
         throw new UsernameNotFoundException("User Not Found : "+username);
