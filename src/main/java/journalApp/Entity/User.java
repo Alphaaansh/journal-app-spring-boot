@@ -28,9 +28,8 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
     private List<JournalEntry> journalEntries=new ArrayList<>();
 
     @ElementCollection
-    private List<String>roles;
+    private List<String>roles =new ArrayList<>();
 }
