@@ -27,10 +27,9 @@ public class User {
     @NotNull
     private String password;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<JournalEntry> journalEntries=new ArrayList<>();
 
-    @ElementCollection
-    private List<String>roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String>roles =new ArrayList<>();
 }

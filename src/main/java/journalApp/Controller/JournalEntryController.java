@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -80,6 +81,7 @@ public class JournalEntryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @Transactional
     @PutMapping("id/{myId}")
     public ResponseEntity<?> updateJournalEntryById(@PathVariable Long myId,
                                                     @RequestBody JournalEntry newEntry)
@@ -89,7 +91,7 @@ public class JournalEntryController {
         User user=userService.findByName(name);
         List<JournalEntry>collect=user.getJournalEntries().stream().filter(x->x.getId().equals(myId)).collect(Collectors.toList());
 
-        if (collect!=null){
+        if (collect != null){
             Optional<JournalEntry>journalEntry=journalEntryService.findById(myId);
             if (journalEntry.isPresent()){
                 JournalEntry old=journalEntry.get();
@@ -97,6 +99,7 @@ public class JournalEntryController {
                 if (newEntry.getTitle()!=null && !newEntry.getTitle().equals("")){
                     old.setTitle(newEntry.getTitle());
                 }
+                old.setDate(LocalDateTime.now());
 
                 if (newEntry.getContent()!=null && !newEntry.getContent().equals("")){
                     old.setContent(newEntry.getContent());
