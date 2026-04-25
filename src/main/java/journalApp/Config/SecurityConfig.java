@@ -28,11 +28,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/public/**").permitAll()
                 .antMatchers("/journal/**","/user/**").authenticated()
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .and()
-                .httpBasic();
-
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.csrf().disable();
+                .httpBasic()
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .csrf().disable();
     }
 
     @Override
