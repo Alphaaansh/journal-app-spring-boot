@@ -48,7 +48,7 @@ public class JournalEntryService {
             if (journalEntry.isPresent()){
                 JournalEntry old=journalEntry.get();
                 old.setTitle(newEntry.getTitle()!=null && !newEntry.getTitle().equals("")?newEntry.getTitle():old.getTitle());
-                old.setContent(newEntry.getContent()!=null && newEntry.getContent().equals("")?newEntry.getContent():old.getContent());
+                old.setContent(newEntry.getContent()!=null && !newEntry.getContent().equals("")?newEntry.getContent():old.getContent());
                 journalEntryRepository.save(old);
                 return old;
             }
