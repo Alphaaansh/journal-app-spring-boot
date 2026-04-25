@@ -31,6 +31,8 @@ public class User {
 
     private List<JournalEntry> journalEntries=new ArrayList<>();
 
-    @ElementCollection
-    private List<String>roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "roles")
+    private List<String>roles=new ArrayList<>();
 }
